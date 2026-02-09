@@ -7,6 +7,8 @@ from app.core.starkbank import get_starkbank
 from app.webhooks.invoice import router as invoice_webhook_router
 import logging
 from app.core.config import settings
+from sqlalchemy.exc import OperationalError
+from app.db import Base, engine
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,6 +21,12 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # init SDK 
     get_starkbank()
+
+    logger.info("Application startup begin")
+
+    # cria as tabelas SEMPRE no startup
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database schema ensured (create_all)")
 
     # scheduler
     enable_scheduler = settings.enable_scheduler
