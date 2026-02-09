@@ -92,6 +92,19 @@ When an invoice is credited/paid, the app will:
 2. Compute net amount (received amount minus eventual fees)
 3. Create a Transfer to the target account defined in the assignment
 
+### Persistence note
+
+For simplicity and to keep the project lightweight, this implementation uses SQLite with a temporary filesystem (`/tmp`) when running on **Render free tier**.
+
+This means webhook idempotency data is not persisted across service restarts.
+
+In a production environment, this would be replaced by:
+- A persistent database (PostgreSQL / MySQL), or
+- A persistent disk attached to the service
+
+The idempotency logic is intentionally kept explicit and isolated to demonstrate the intended production behavior.
+
+
 ## Production Considerations (Not implemented in this demo)
 
 This project intentionally keeps the implementation simple to match the assignment scope. In a real production setup, I would apply:
