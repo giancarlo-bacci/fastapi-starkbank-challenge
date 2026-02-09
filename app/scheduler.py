@@ -8,7 +8,7 @@ def start_scheduler():
     scheduler.add_job(
         run_job,
         trigger="interval",
-        minutes=1,
+        hours=3,
         id="invoicer",
         replace_existing=True,
     )
