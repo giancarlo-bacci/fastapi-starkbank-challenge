@@ -20,6 +20,12 @@ async def lifespan(app: FastAPI):
     # init SDK 
     get_starkbank()
 
+    logger.info("Application startup begin")
+
+    # cria as tabelas SEMPRE no startup
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database schema ensured (create_all)")
+
     # scheduler
     enable_scheduler = settings.enable_scheduler
     if enable_scheduler:
